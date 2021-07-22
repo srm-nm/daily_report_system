@@ -5,7 +5,7 @@ package constants;
  * ※インターフェイスに定義した変数は public static final 修飾子がついてるとみなされる
  */
 
-public interface jpaConst {
+public interface JpaConst {
 
     // persistence-unit名
     String PERSISTENCE_UNIT_NAME = "daily_report_system";
