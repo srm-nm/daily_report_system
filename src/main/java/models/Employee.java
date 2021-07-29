@@ -67,7 +67,7 @@ public class Employee {
      * パスワード
      */
     @Column(name = JpaConst.EMP_COL_PASS, length = 64, nullable = false)
-    private String passward;
+    private String password;
 
     /**
      * 管理者権限があるかどうか（一般：0，管理者：1）
