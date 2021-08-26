@@ -41,9 +41,17 @@ public interface JpaConst {
     String REP_COL_CREATED_AT = "created_at";   // 登録日時
     String REP_COL_UPDATED_AT = "updated_at";   // 更新日時
 
+    // フォローテーブル
+    String TABLE_FOL = "follows"; // テーブル名
+    // フォローテーブルカラム
+    String FOL_COL_ID = "id";            // id
+    String FOL_COL_EMP = "employee_id";  // フォローをする側の従業員のid
+    String FOL_COL_FOLLOW = "follow_id"; // フォローされる側の従業員のid
+
     // Entity名
     String ENTITY_EMP = "employee"; // 従業員
     String ENTITY_REP = "report";   // 日報
+    String ENTITY_FOL = "follow";   // フォロー
 
     // JPQL内パラメータ
     String JPQL_PARM_CODE     = "code";     // 社員番号
@@ -63,6 +71,7 @@ public interface JpaConst {
     // 指定した社員番号を保持する従業員の件数を取得する
     String Q_EMP_COUNT_RESISTERED_BY_CODE = ENTITY_EMP + ".countRegisteredByCode";
     String Q_EMP_COUNT_RESISTERED_BY_CODE_DEF = "SELECT COUNT(e) FROM Employee AS e WHERE e.code = :" + JPQL_PARM_CODE;
+
     // 全ての日報をidの降順に取得する
     String Q_REP_GET_ALL = ENTITY_REP + ".getAll";
     String Q_REP_GET_ALL_DEF = "SELECT r FROM Report AS r ORDER BY r.id DESC";
@@ -75,4 +84,9 @@ public interface JpaConst {
     // 指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
+
+    // フォローした従業員全てをidの降順に取得する
+    String Q_FOL_GET_ALL = ENTITY_FOL + ".getAll";
+    String Q_FOL_GET_ALL_DEF = "SELECT f FROM Follow AS f WHERE employee_id = :" + JPQL_PARM_EMPLOYEE;
+
 }
