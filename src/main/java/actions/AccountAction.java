@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
 import actions.views.FollowView;
+import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
@@ -34,7 +35,7 @@ public class AccountAction extends ActionBase {
      *  @throws ServletException
      *  @throws IOException
      */
-    public void follow() throws ServletException, IOException {
+    public void followList() throws ServletException, IOException {
 
         // ログイン中の従業員情報を取得
         EmployeeView loginEmployee = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
@@ -52,7 +53,71 @@ public class AccountAction extends ActionBase {
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); // 1ページに表示するレコードの件数
 
         // フォロー一覧画面を表示
-        forward(ForwardConst.FW_FOL_FOLLOW);
+        forward(ForwardConst.FW_ACC_FOLLOW);
+    }
+
+    public void account() throws ServletException, IOException {
+
+     // 管理者かどうかのチェック
+//        if (checkAdmin()) {
+//
+//            // idを条件に従業員データを取得する
+//            EmployeeView ev = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+//
+//            if (ev == null || ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+//
+//                // データが取得できなかった、または論理削除されている場合はエラー画面を表示
+//                forward(ForwardConst.FW_ERR_UNKNOWN);
+//                return;
+//            }
+//
+//            putRequestScope(AttributeConst.EMPLOYEE, ev); // 取得した従業員情報
+//
+//        }
+
+        // idを条件に従業員データを取得する
+        EmployeeView ev = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        if (ev == null || ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
+
+         // データが取得できなかった、または論理削除されている場合はエラー画面を表示
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+            return;
+        }
+
+        putRequestScope(AttributeConst.EMPLOYEE, ev); // 取得した従業員情報
+
+        int page = getPage();
+        List<ReportView> reports = service.getUserPerPage(ev, page);
+
+        long userReportCount = service.countAllOne(ev);
+
+        putRequestScope(AttributeConst.REPORTS, reports); // 取得した日報データ
+        putRequestScope(AttributeConst.REP_COUNT, userReportCount); // 指定した従業員が作成した日報の件数
+        putRequestScope(AttributeConst.PAGE, page); // ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); // 1ページに表示するレコードの件数
+
+        // アカウント画面を表示
+        forward(ForwardConst.FW_ACC_ACCOUNT);
+
+    }
+
+    private boolean checkAdmin() throws ServletException, IOException {
+
+        // セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        // 管理者でなければエラー画面を表示
+        if (ev.getAdminFlag() != AttributeConst.ROLE_ADMIN.getIntegerValue()) {
+
+            forward(ForwardConst.FW_ERR_UNKNOWN);
+            return false;
+
+        } else {
+
+            return true;
+        }
+
     }
 
 }

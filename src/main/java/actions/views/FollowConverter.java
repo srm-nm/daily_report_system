@@ -55,7 +55,7 @@ public class FollowConverter {
     }
 
     /**
-     * Viewモデルの全フィールドの内容をDTOモデ角フィールドにコピーする
+     * Viewモデルの全フィールドの内容をDTOモデルのフィールドにコピーする
      * @param f DTOモデル(コピー先)
      * @param fv Viewモデル(コピー先)
      */

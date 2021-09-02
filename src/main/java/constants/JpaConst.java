@@ -57,6 +57,7 @@ public interface JpaConst {
     String JPQL_PARM_CODE     = "code";     // 社員番号
     String JPQL_PARM_PASSWORD = "password"; // パスワード
     String JPQL_PARM_EMPLOYEE = "employee"; // 従業員
+    String JPQL_PARM_FOLLOW = "follow";     // フォロー対象の従業員
 
     // NamedQueryの nameとquery
     // すべての従業員をidの降順に所得する
@@ -78,18 +79,27 @@ public interface JpaConst {
     // 全ての日報の件数を取得する
     String Q_REP_COUNT = ENTITY_REP + ".count";
     String Q_REP_COUNT_DEF = "SELECT COUNT(r) FROM Report AS r";
-    // 指定した従業員が作成した日報を全件idの降順で取得する
+    // ログイン中の従業員が作成した日報を全件idの降順で取得する
     String Q_REP_GET_ALL_MINE = ENTITY_REP + ".getAllMine";
     String Q_REP_GET_ALL_MINE_DEF = "SELECT r FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY r.id DESC";
-    // 指定した従業員が作成した日報の件数を取得する
+    // ログイン中の従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
+    // 指定した従業員が作成した日報を全件idの降順で取得する
+    String Q_REP_GET_ALL_ONE = ENTITY_REP + ".getAllOne";
+    String Q_REP_GET_ALL_ONE_DEF = "SELECT r FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + "ORDER BY r.id DESC";
+    // 指定した従業員が作成した日報の件数を取得する
+    String Q_REP_COUNT_ALL_ONE = ENTITY_REP + ".countAllOne";
+    String Q_REP_COUNT_ALL_ONE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE er.employee = :" + JPQL_PARM_EMPLOYEE;
 
     // 指定した従業員がフォローした従業員を全件取得する
     String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
-    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow AS f WHERE f.employee_id = :" + JPQL_PARM_EMPLOYEE;
+    String Q_FOL_GET_ALL_MINE_DEF = "SELECT f FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE;
     // 指定した従業員がフォローした従業員の件数を取得する
     String Q_FOL_COUNT_ALL_MINE = ENTITY_FOL + ".countAllMine";
-    String Q_FOL_COUNT_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.employee_id = :" + JPQL_PARM_EMPLOYEE;
+    String Q_FOL_COUNT_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE;
+    // 対象の従業員をフォローする
+    String Q_FOL_FOLLOW = ENTITY_FOL + ".follow";
+    String Q_FOL_FOLLOW_DEF = "INSERT INTO Follow AS f (f.employee, f.follow) VALUES = :" + "(" + JPQL_PARM_EMPLOYEE + "," + JPQL_PARM_FOLLOW + ")";
 
 }
