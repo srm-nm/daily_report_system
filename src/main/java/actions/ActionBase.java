@@ -11,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import actions.views.EmployeeView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.PropertyConst;
@@ -112,7 +113,7 @@ public abstract class ActionBase {
 
     }
 
-    protected void redirect(ForwardConst action, ForwardConst command, AttributeConst id) throws ServletException, IOException {
+    protected void redirect(ForwardConst action, ForwardConst command, EmployeeView id) throws ServletException, IOException {
 
         // URLを構築
         String redirectUrl = request.getContextPath() + "/?action=" + action.getValue();
@@ -120,7 +121,7 @@ public abstract class ActionBase {
             redirectUrl = redirectUrl + "&command=" + command.getValue();
         }
         if (id != null) {
-            redirectUrl = redirectUrl + "&id=" + id.getValue();
+            redirectUrl = redirectUrl + "&id=" + id.getId();
         }
 
         // URLへリダイレクト

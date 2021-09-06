@@ -17,8 +17,8 @@
 
         <h2>${employee.name}のアカウントページ</h2>
         <form method="POST" action="<c:url value='?action=${actAcc}&command=${commFol}' />">
-            <input type="hidden" name="${AttributeConst.LOGIN_EMP}" value="${sessionScope.login_employee}" />
-            <input type="hidden" name="${AttributeConst.EMP_ID}" value="${employee.id}" />
+            <input type="hidden" name="${AttributeConst.LOGIN_EMP.getValue()}" value="${sessionScope.login_employee}" />
+            <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}" />
             <button type="submit">フォロー</button>
         </form>
         <form method="POST" action="<c:url value='?action=${actAcc}&command=${commRmv}' />">

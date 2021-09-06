@@ -79,7 +79,7 @@ public class AccountService  extends ServiceBase {
      * 指定した従業員をフォローする
      * @param employee
      */
-    public void follow (FollowView fv) {
+    public void newFollow (FollowView fv) {
 
         em.getTransaction().begin();
         em.persist(FollowConverter.toModel(fv));
