@@ -11,7 +11,7 @@
 
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commOut" value="${ForwardConst.CMD_LOGOUT.getValue()}" />
-<c:set var="commFol" value="${ForwardConst.CMD_FOLLOW.getValue()}" />
+<c:set var="commFol" value="${ForwardConst.CMD_FOL_LIST.getValue()}" />
 
 <!DOCTYPE html>
 <html lang="ja">

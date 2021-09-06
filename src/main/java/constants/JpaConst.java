@@ -87,10 +87,10 @@ public interface JpaConst {
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
     // 指定した従業員が作成した日報を全件idの降順で取得する
     String Q_REP_GET_ALL_ONE = ENTITY_REP + ".getAllOne";
-    String Q_REP_GET_ALL_ONE_DEF = "SELECT r FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + "ORDER BY r.id DESC";
+    String Q_REP_GET_ALL_ONE_DEF = "SELECT r FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE + " ORDER BY r.id DESC";
     // 指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_ONE = ENTITY_REP + ".countAllOne";
-    String Q_REP_COUNT_ALL_ONE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE er.employee = :" + JPQL_PARM_EMPLOYEE;
+    String Q_REP_COUNT_ALL_ONE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
 
     // 指定した従業員がフォローした従業員を全件取得する
     String Q_FOL_GET_ALL_MINE = ENTITY_FOL + ".getAllMine";
@@ -100,6 +100,9 @@ public interface JpaConst {
     String Q_FOL_COUNT_ALL_MINE_DEF = "SELECT COUNT(f) FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE;
     // 対象の従業員をフォローする
     String Q_FOL_FOLLOW = ENTITY_FOL + ".follow";
-    String Q_FOL_FOLLOW_DEF = "INSERT INTO Follow AS f (f.employee, f.follow) VALUES = :" + "(" + JPQL_PARM_EMPLOYEE + "," + JPQL_PARM_FOLLOW + ")";
+    String Q_FOL_FOLLOW_DEF = "INSERT INTO Follow AS f (f.employee, f.follow) VALUES (" + JPQL_PARM_EMPLOYEE + ", " + JPQL_PARM_FOLLOW + ")";
+    // 対象の従業員のフォローデータを削除する
+    String Q_FOL_REMOVE = ENTITY_FOL + ".remove";
+    String Q_FOL_REMOVE_DEF = "DELETE FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE + " AND f.follow = :" + JPQL_PARM_FOLLOW;
 
 }

@@ -55,7 +55,8 @@ public class AccountService  extends ServiceBase {
 
         List<Report> reports = em.createNamedQuery(JpaConst.Q_REP_GET_ALL_ONE, Report.class)
                 .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(employee))
-                .setMaxResults(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
+                .setMaxResults(JpaConst.ROW_PER_PAGE)
                 .getResultList();
         return ReportConverter.toViewList(reports);
     }
@@ -78,9 +79,18 @@ public class AccountService  extends ServiceBase {
      * 指定した従業員をフォローする
      * @param employee
      */
-    public void follow() {
+    public void follow (FollowView fv) {
 
+        em.getTransaction().begin();
+        em.persist(FollowConverter.toModel(fv));
+        em.getTransaction().commit();
+    }
 
+    public void unFollow (EmployeeView loginEmp, EmployeeView ev) {
+
+        em.createNamedQuery(JpaConst.Q_FOL_REMOVE)
+            .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, loginEmp)
+            .setParameter(JpaConst.JPQL_PARM_FOLLOW, ev);
     }
 
     /**

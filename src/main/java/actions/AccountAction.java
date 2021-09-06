@@ -58,23 +58,6 @@ public class AccountAction extends ActionBase {
 
     public void account() throws ServletException, IOException {
 
-     // 管理者かどうかのチェック
-//        if (checkAdmin()) {
-//
-//            // idを条件に従業員データを取得する
-//            EmployeeView ev = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
-//
-//            if (ev == null || ev.getDeleteFlag() == AttributeConst.DEL_FLAG_TRUE.getIntegerValue()) {
-//
-//                // データが取得できなかった、または論理削除されている場合はエラー画面を表示
-//                forward(ForwardConst.FW_ERR_UNKNOWN);
-//                return;
-//            }
-//
-//            putRequestScope(AttributeConst.EMPLOYEE, ev); // 取得した従業員情報
-//
-//        }
-
         // idを条件に従業員データを取得する
         EmployeeView ev = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
@@ -85,11 +68,15 @@ public class AccountAction extends ActionBase {
             return;
         }
 
+
+
         putRequestScope(AttributeConst.EMPLOYEE, ev); // 取得した従業員情報
 
+        // 指定した従業員が作成した日報データを、指定されたページ数の一覧画面に表示する分取得する
         int page = getPage();
         List<ReportView> reports = service.getUserPerPage(ev, page);
 
+        // 指定した従業員が作成した日報データの件数を取得
         long userReportCount = service.countAllOne(ev);
 
         putRequestScope(AttributeConst.REPORTS, reports); // 取得した日報データ
@@ -118,6 +105,27 @@ public class AccountAction extends ActionBase {
             return true;
         }
 
+    }
+
+    public void newFollow() throws ServletException, IOException {
+
+        FollowView fv = new FollowView(
+                null,
+                (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP),
+                service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID))));
+
+        service.follow(fv);
+
+        redirect(ForwardConst.ACT_ACC, ForwardConst.CMD_ACCOUNT, AttributeConst.EMP_ID);
+    }
+
+    public void remove() throws ServletException, IOException {
+
+        EmployeeView loginEmp = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+
+        EmployeeView ev = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+
+        service.unFollow(loginEmp, ev);
     }
 
 }

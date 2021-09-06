@@ -4,17 +4,63 @@
 <%@ page import="constants.ForwardConst"%>
 <%@ page import="constants.AttributeConst"%>
 
-<c:set var="actEmp" value="${ForwardConst.ACT_EMP.getValue}" />
-<c:set var="actRep" value="${ForwardConst.ACT_REP.getValue}" />
-<c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue}" />
-<c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue}" />
+<c:set var="actEmp" value="${ForwardConst.ACT_EMP.getValue()}" />
+<c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
+<c:set var="actAcc" value="${ForwardConst.ACT_ACC.getValue()}" />
+<c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
+<c:set var="commShow" value="${ForwardConst.CMD_SHOW.getValue()}" />
+<c:set var="commFol" value="${ForwardConst.CMD_FOLLOW.getValue()}" />
+<c:set var="commRmv" value="${ForwardConst.CMD_REMOVE.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
 
         <h2>${employee.name}のアカウントページ</h2>
+        <form method="POST" action="<c:url value='?action=${actAcc}&command=${commFol}' />">
+            <input type="hidden" name="${AttributeConst.LOGIN_EMP}" value="${sessionScope.login_employee}" />
+            <input type="hidden" name="${AttributeConst.EMP_ID}" value="${employee.id}" />
+            <button type="submit">フォロー</button>
+        </form>
+        <form method="POST" action="<c:url value='?action=${actAcc}&command=${commRmv}' />">
+            <button type="submit">フォロー解除</button>
+        </form>
 
-        <%-- <c:import url="/WEB-INF/views/employees/show.jsp" /><br /><br /> --%>
+        <c:if test="${sessionScope.login_employee != null}">
+            <c:if test="${sessionScope.login_employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}">
+                <br /><br />
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>社員番号</th>
+                            <td><c:out value="${employee.code}" /></td>
+                        </tr>
+                        <tr>
+                            <th>氏名</th>
+                            <td><c:out value="${employee.name}" /></td>
+                        </tr>
+                        <tr>
+                            <th>権限</th>
+                            <td><c:choose>
+                                    <c:when test="${employee.adminFlag == AttributeConst.ROLE_ADMIN.getIntegerValue()}">管理者</c:when>
+                                    <c:otherwise>一般</c:otherwise>
+                                </c:choose></td>
+                        </tr>
+                        <tr>
+                            <th>登録日時</th>
+                            <fmt:parseDate value="${employee.createdAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="createDay" type="date" />
+                            <td><fmt:formatDate value="${createDay}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+                        </tr>
+                        <tr>
+                            <th>更新日時</th>
+                            <fmt:parseDate value="${employee.updatedAt}" pattern="yyyy-MM-dd'T'HH:mm:ss" var="updateDay" type="date" />
+                            <td><fmt:formatDate value="${updateDay}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </c:if>
+        </c:if>
+
+        <br /><br />
 
         <h3>【<c:out value="${employee.name}" />の日報 一覧】</h3>
         <table id="report_list">
@@ -34,6 +80,20 @@
                 </c:forEach>
             </tbody>
         </table>
+
+        <div id="pagination">
+            （全 ${reports_count} 件）<br />
+            <c:forEach var="i" begin="1" end="${((reports_count - 1) / maxRow) + 1}" step="1">
+                <c:choose>
+                    <c:when test="${i == page}">
+                        <c:out value="${i}" />&nbsp;
+                    </c:when>
+                    <c:otherwise>
+                        <a href="<c:url value='?action=${actTop}&command=${commIdx}&page=${i}' />"><c:out value="${i}" /></a>&nbsp;
+                    </c:otherwise>
+                </c:choose>
+            </c:forEach>
+        </div>
 
     </c:param>
 </c:import>
