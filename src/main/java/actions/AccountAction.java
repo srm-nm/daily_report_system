@@ -121,11 +121,15 @@ public class AccountAction extends ActionBase {
 
     public void remove() throws ServletException, IOException {
 
-        EmployeeView loginEmp = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        FollowView fv = new FollowView(
+                null,
+                (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP),
+                service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID))));
 
-        EmployeeView ev = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
-        service.unFollow(loginEmp, ev);
+        service.remove(fv);
+
+        redirect(ForwardConst.ACT_ACC, ForwardConst.CMD_ACCOUNT, service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID))));
     }
 
 }

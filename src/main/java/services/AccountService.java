@@ -86,11 +86,11 @@ public class AccountService  extends ServiceBase {
         em.getTransaction().commit();
     }
 
-    public void unFollow (EmployeeView loginEmp, EmployeeView ev) {
+    public void remove (FollowView fv) {
 
-        em.createNamedQuery(JpaConst.Q_FOL_REMOVE)
-            .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, loginEmp)
-            .setParameter(JpaConst.JPQL_PARM_FOLLOW, ev);
+        em.getTransaction().begin();
+        em.remove(FollowConverter.toModel(fv));
+        em.getTransaction().commit();
     }
 
     /**
