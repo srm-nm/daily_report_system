@@ -11,6 +11,7 @@ import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
+import models.Employee;
 import services.AccountService;
 
 public class AccountAction extends ActionBase {
@@ -68,7 +69,12 @@ public class AccountAction extends ActionBase {
             return;
         }
 
-
+//       if (findFollow() == true) {
+//           putSessionScope(AttributeConst.FOL_FIND, 1);
+//       }
+//       if (findFollow() == false) {
+//           putSessionScope(AttributeConst.FOL_FIND, 0);
+//       }
 
         putRequestScope(AttributeConst.EMPLOYEE, ev); // 取得した従業員情報
 
@@ -89,21 +95,13 @@ public class AccountAction extends ActionBase {
 
     }
 
-    private boolean checkAdmin() throws ServletException, IOException {
+    private boolean findFollow() throws ServletException, IOException {
 
         // セッションからログイン中の従業員情報を取得
-        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        FollowView login = (FollowView) getSessionScope(AttributeConst.LOGIN_EMP);
+        FollowView fv = (FollowView) getSessionScope(AttributeConst.EMP_ID);
 
-        // 管理者でなければエラー画面を表示
-        if (ev.getAdminFlag() != AttributeConst.ROLE_ADMIN.getIntegerValue()) {
-
-            forward(ForwardConst.FW_ERR_UNKNOWN);
-            return false;
-
-        } else {
-
-            return true;
-        }
+        return service.findFollow(login, fv);
 
     }
 
@@ -121,15 +119,13 @@ public class AccountAction extends ActionBase {
 
     public void remove() throws ServletException, IOException {
 
-        FollowView fv = new FollowView(
-                null,
-                (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP),
-                service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID))));
+        Employee loginEmp = service.empFindOneInternal(toNumber(getRequestParam(AttributeConst.LOGIN_EMP)));
+        Employee employee = service.empFindOneInternal(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
-
-        service.remove(fv);
+        service.remove(loginEmp, employee);
 
         redirect(ForwardConst.ACT_ACC, ForwardConst.CMD_ACCOUNT, service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID))));
     }
+
 
 }

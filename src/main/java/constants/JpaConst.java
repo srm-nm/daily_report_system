@@ -104,5 +104,11 @@ public interface JpaConst {
     // 対象の従業員のフォローデータを削除する
     String Q_FOL_REMOVE = ENTITY_FOL + ".remove";
     String Q_FOL_REMOVE_DEF = "DELETE FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE + " AND f.follow = :" + JPQL_PARM_FOLLOW;
+    // フォローデータの主キーを取得
+    String Q_FOL_GET_KEY = ENTITY_FOL + ".getKey";
+    String Q_FOL_GET_KEY_DEF = "SELECT f.id FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE + " AND f.follow = :" + JPQL_PARM_FOLLOW;
+    // フォローデータの存在を確認
+    String Q_FOL_GET_FOLLOW = ".getFollow";
+    String Q_FOL_GET_FOLLOW_DEF = "SELECT f FROM Follow AS f WHERE f.employee = :" + JPQL_PARM_EMPLOYEE + " AND f.follow = :" + JPQL_PARM_FOLLOW;
 
 }

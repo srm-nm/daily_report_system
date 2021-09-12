@@ -17,7 +17,7 @@
 
         <h2>${employee.name}のアカウントページ</h2>
         <c:choose>
-            <c:when test="">
+            <c:when test="${sessionScope.follows_find == 0}">
                 <form method="POST" action="<c:url value='?action=${actAcc}&command=${commFol}' />">
                     <input type="hidden" name="${AttributeConst.LOGIN_EMP.getValue()}" value="${sessionScope.login_employee}" />
                     <input type="hidden" name="${AttributeConst.EMP_ID.getValue()}" value="${employee.id}" />

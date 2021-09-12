@@ -86,10 +86,17 @@ public class AccountService  extends ServiceBase {
         em.getTransaction().commit();
     }
 
-    public void remove (FollowView fv) {
+    public void remove (Employee loginEmp, Employee employee) {
+
+        int id = (int) em.createNamedQuery(JpaConst.Q_FOL_GET_KEY, Integer.class)
+                            .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, loginEmp)
+                            .setParameter(JpaConst.JPQL_PARM_FOLLOW, employee)
+                            .getSingleResult();
+
+        Follow f = folFindOneInternal(id);
 
         em.getTransaction().begin();
-        em.remove(FollowConverter.toModel(fv));
+        em.remove(f);
         em.getTransaction().commit();
     }
 
@@ -103,7 +110,7 @@ public class AccountService  extends ServiceBase {
         return EmployeeConverter.toView(e);
     }
 
-    private Employee empFindOneInternal(int id) {
+    public Employee empFindOneInternal(int id) {
         Employee e = em.find(Employee.class, id);
 
         return e;
@@ -118,5 +125,32 @@ public class AccountService  extends ServiceBase {
         Report r = em.find(Report.class, id);
 
         return r;
+    }
+
+    public FollowView folFindOne(int id) {
+        Follow f = folFindOneInternal(id);
+        return FollowConverter.toView(f);
+    }
+
+    public Follow folFindOneInternal(int id) {
+        Follow f = em.find(Follow.class, id);
+
+        return f;
+    }
+
+    public boolean findFollow(FollowView loginEmp, FollowView fv) {
+
+        Follow f = null;
+
+        f = em.createNamedQuery(JpaConst.Q_FOL_GET_FOLLOW, Follow.class)
+                .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, loginEmp)
+                .setParameter(JpaConst.JPQL_PARM_FOLLOW, fv)
+                .getSingleResult();
+
+        if(f != null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
