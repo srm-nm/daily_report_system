@@ -11,7 +11,6 @@ import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
-import models.Employee;
 import services.AccountService;
 
 public class AccountAction extends ActionBase {
@@ -119,8 +118,8 @@ public class AccountAction extends ActionBase {
 
     public void remove() throws ServletException, IOException {
 
-        Employee loginEmp = service.empFindOneInternal(toNumber(getRequestParam(AttributeConst.LOGIN_EMP)));
-        Employee employee = service.empFindOneInternal(toNumber(getRequestParam(AttributeConst.EMP_ID)));
+        EmployeeView loginEmp = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
+        EmployeeView employee = service.empFindOne(toNumber(getRequestParam(AttributeConst.EMP_ID)));
 
         service.remove(loginEmp, employee);
 

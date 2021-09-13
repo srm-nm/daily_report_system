@@ -86,11 +86,11 @@ public class AccountService  extends ServiceBase {
         em.getTransaction().commit();
     }
 
-    public void remove (Employee loginEmp, Employee employee) {
+    public void remove (EmployeeView loginEmp, EmployeeView employee) {
 
         int id = (int) em.createNamedQuery(JpaConst.Q_FOL_GET_KEY, Integer.class)
-                            .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, loginEmp)
-                            .setParameter(JpaConst.JPQL_PARM_FOLLOW, employee)
+                            .setParameter(JpaConst.JPQL_PARM_EMPLOYEE, EmployeeConverter.toModel(loginEmp))
+                            .setParameter(JpaConst.JPQL_PARM_FOLLOW, EmployeeConverter.toModel(employee))
                             .getSingleResult();
 
         Follow f = folFindOneInternal(id);
